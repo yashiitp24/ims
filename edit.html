@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}Edit Item - IMS{% endblock %}
+
+{% block content %}
+<style>
+  /* Styling for the edit item form */
+  .form-container {
+    max-width: 500px;
+    margin: auto;
+    padding: 30px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    background-color: #ffffff;
+  }
+
+  /* Dark mode compatibility */
+  body.dark-mode .form-container {
+    background-color: #1e1e1e;
+    border-color: #444;
+  }
+
+  .form-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-weight: bold;
+  }
+
+  /* Dark mode adjustments for text and input styles */
+  body.dark-mode .form-container h2 {
+    color: #f1f1f1;
+  }
+
+  body.dark-mode label {
+    color: #e0e0e0;
+  }
+
+  body.dark-mode input {
+    background-color: #2a2a2a;
+    color: #fff;
+    border-color: #555;
+  }
+</style>
+
+<!-- Main form container for editing product details -->
+<div class="form-container">
+  <h2>Edit Item</h2>
+
+  <!-- Form for updating product details -->
+  <form method="POST">
+    
+    <!-- Product Name input field -->
+    <div class="mb-3">
+      <label class="form-label">Product Name:</label>
+      <input type="text" name="name" value="{{ item[1] }}" class="form-control" required>
+    </div>
+
+    <!-- Quantity input field -->
+    <div class="mb-3">
+      <label class="form-label">Quantity:</label>
+      <input type="number" name="qty" value="{{ item[2] }}" min="0" class="form-control" required>
+    </div>
+
+    <!-- Price input field -->
+    <div class="mb-3">
+      <label class="form-label">Price (₹):</label>
+      <input type="number" step="0.01" name="price" value="{{ item[3] }}" min="0" class="form-control" required>
+    </div>
+
+    <!-- Submit button to save changes -->
+    <button type="submit" class="btn btn-primary w-100">Update Item</button>
+  </form>
+</div>
+{% endblock %}
