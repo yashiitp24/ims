@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Edit Profile - IMS{% endblock %}
+
+{% block content %}
+<!-- This is the main container for the profile edit form -->
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <!-- Section header -->
+      <h2 class="mb-4 text-center">Edit Your Profile</h2>
+
+      <!-- This form allows users to update their profile details -->
+      <form method="POST" enctype="multipart/form-data">
+        
+        <!-- First Name field -->
+        <div class="form-group mb-3">
+          <label for="first_name">First Name:</label>
+          <input type="text" class="form-control" name="first_name" value="{{ user[0] }}" required>
+        </div>
+
+        <!-- Email field -->
+        <div class="form-group mb-3">
+          <label for="email">Email:</label>
+          <input type="email" class="form-control" name="email" value="{{ user[1] }}" required>
+        </div>
+
+        <!-- Password field (yes, this shows the current password in plain text for now) -->
+        <div class="form-group mb-3">
+          <label for="password">Password:</label>
+          <input type="password" class="form-control" name="password" value="{{ user[2] }}" required>
+        </div>
+
+        <!-- Contact number field (optional) -->
+        <div class="form-group mb-3">
+          <label for="contact">Contact Number:</label>
+          <input type="text" class="form-control" name="contact" value="{{ user[3] or '' }}">
+        </div>
+
+        <!-- QR Code upload section -->
+        <div class="form-group mb-3">
+          <label for="qr_code">Upload QR Code (Image):</label>
+          <input type="file" class="form-control" name="qr_code" accept="image/*">
+
+          <!-- If the user already has a QR image uploaded, show a preview -->
+          {% if user[4] %}
+          <p class="mt-2">Current QR Code:</p>
+          <img src="{{ url_for('static', filename='qr_uploads/' ~ user[4]) }}" width="150">
+          {% endif %}
+        </div>
+
+        <!-- Submit button to update the user's profile -->
+        <button type="submit" class="btn btn-primary mt-4">Update Profile</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
