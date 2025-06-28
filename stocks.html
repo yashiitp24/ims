@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}Stock Manager - IMS{% endblock %}
+{% block content %}
+<style>
+  h2 {
+    color: #198754;
+    margin-bottom: 20px;
+    font-weight: 600;
+  }
+
+  .search-form input {
+    width: 300px;
+    margin-bottom: 20px;
+    border-radius: 6px;
+  }
+
+  .table {
+    background-color: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 0 12px rgba(0,0,0,0.08);
+  }
+
+  .table th {
+    background-color: #f1f1f1;
+    color: #333;
+    font-weight: 600;
+  }
+
+  .table td {
+    vertical-align: middle;
+  }
+
+  .btn-sm {
+    padding: 4px 10px;
+    font-size: 13px;
+  }
+</style>
+
+<h2>Stock Manager</h2>
+
+<form class="search-form" method="GET" action="/stocks">
+  <input type="text" name="search" placeholder="Search by Name" value="{{ search or '' }}" class="form-control" oninput="this.form.submit()">
+</form>
+
+<a href="/add" class="btn btn-success mb-3">+ Add Item</a>
+
+<table class="table table-bordered table-hover">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Qty</th>
+      <th>Price (₹)</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in items %}
+    <tr>
+      <td>{{ item[0] }}</td>
+      <td>{{ item[1] }}</td>
+      <td>{{ item[2] }}</td>
+      <td>₹ {{ item[3] }}</td>
+      <td>
+        <a href="/edit/{{ item[0] }}" class="btn btn-primary btn-sm">Edit</a>
+        <a href="/delete/{{ item[0] }}" class="btn btn-danger btn-sm">Delete</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
