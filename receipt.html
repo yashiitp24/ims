@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% block title %}Receipt - IMS{% endblock %}
+
+{% block content %}
+<style>
+  .receipt-container {
+    max-width: 800px;
+    margin: 30px auto;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    background-color: #fff;
+    position: relative;
+    font-family: 'Poppins', sans-serif;
+    color: #000;
+  }
+
+  .qr-code {
+    margin-top: 30px;
+    text-align: center;
+  }
+
+  .qr-code img {
+    width: 180px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    background-color: white;
+    border-radius: 8px;
+  }
+
+  .footer-text {
+    text-align: center;
+    margin-top: 40px;
+    font-size: 14px;
+    color: #555;
+  }
+</style>
+
+<div class="receipt-container">
+
+  <h2 style="text-align:center; margin-bottom: 20px;">Billing Receipt</h2>
+
+  <p><strong>Date:</strong> {{ date_part }} &nbsp;&nbsp; <strong>Time:</strong> {{ time_part }}</p>
+
+  <table style="width:100%; margin-top: 30px; border-collapse: collapse; border: 1px solid #ddd;">
+    <thead style="background-color: #f1f1f1;">
+      <tr>
+        <th style="border:1px solid #ccc; padding: 10px; text-align: left;">Product</th>
+        <th style="border:1px solid #ccc; padding: 10px; text-align: center;">Qty</th>
+        <th style="border:1px solid #ccc; padding: 10px; text-align: right;">Price</th>
+        <th style="border:1px solid #ccc; padding: 10px; text-align: right;">Subtotal</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in bill_items %}
+      <tr>
+        <td style="border:1px solid #eee; padding: 10px;">{{ item['name'] }}</td>
+        <td style="border:1px solid #eee; padding: 10px; text-align: center;">{{ item['quantity'] }}</td>
+        <td style="border:1px solid #eee; padding: 10px; text-align: right;">₹{{ "%.2f"|format(item['price']) }}</td>
+        <td style="border:1px solid #eee; padding: 10px; text-align: right;">₹{{ "%.2f"|format(item['subtotal']) }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div style="text-align: right; margin-top: 30px;">
+    <h4 style="font-size: 18px;">Total Amount: ₹{{ "%.2f"|format(total) }}</h4>
+    <p style="font-size: 14px; color: #666;">Total Products: {{ total_products }}</p>
+  </div>
+
+  {% if qr_code_path %}
+  <div class="qr-code">
+    <p><strong>Scan to Pay</strong></p>
+    <img src="{{ url_for('static', filename=qr_code_path) }}" alt="QR Code">
+  </div>
+  {% endif %}
+
+  <div class="footer-text">
+    <p>Thank you for your purchase!<br>We hope to see you again.</p>
+    <p><strong>Contact Number:</strong> {{ contact_number or "N/A" }}</p>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    document.body.classList.remove("dark-mode");
+    const darkBtn = document.getElementById("dark-mode-toggle");
+    if (darkBtn) {
+      darkBtn.style.display = "none";
+    }
+  });
+</script>
+{% endblock %}
