@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+{% block title %}Products - IMS{% endblock %}
+
+{% block content %}
+<style>
+  .search-sort-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+
+  .search-sort-container input,
+  .search-sort-container a {
+    margin: 5px 10px 5px 0;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+  th, td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: center;
+  }
+
+  th {
+    background-color: #f8f9fa;
+    font-weight: bold;
+    color: #333;
+  }
+
+  tr:hover {
+    background-color: #f1f1f1;
+  }
+
+  .btn {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 6px;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    transition: background-color 0.2s;
+  }
+
+  .btn:hover {
+    background-color: #0056b3;
+  }
+
+  .search-input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    width: 230px;
+  }
+
+  /* Highlighted cell colors */
+  .product-name {
+    color: #0d6efd; /* Blue */
+    font-weight: 500;
+  }
+
+  .product-qty {
+    color: #198754; /* Green */
+    font-weight: 500;
+  }
+
+  .product-price {
+    color: #fd7e14; /* Orange */
+    font-weight: 500;
+  }
+</style>
+
+<h2>Available Products</h2>
+
+<div class="search-sort-container">
+  <input type="text" id="searchInput" class="search-input" onkeyup="searchTable()" placeholder="Search by Product Name">
+
+  <div>
+    <a class="btn" href="#" onclick="sortByName()">Sort by Name</a>
+    <a class="btn" href="#" onclick="sortByQuantity()">Sort by Quantity</a>
+  </div>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>Product Name</th>
+      <th>Quantity</th>
+      <th>Price (₹)</th>
+    </tr>
+  </thead>
+  <tbody id="productTableBody">
+    {% for item in items %}
+    <tr>
+      <td class="product-name">{{ item[1] }}</td>
+      <td class="product-qty">{{ item[2] }}</td>
+      <td class="product-price">{{ item[3] }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<script>
+  function searchTable() {
+    let input = document.getElementById("searchInput").value.toLowerCase();
+    let rows = document.querySelectorAll("#productTableBody tr");
+
+    rows.forEach(row => {
+      let productName = row.querySelector(".product-name").textContent.toLowerCase();
+      row.style.display = productName.includes(input) ? "" : "none";
+    });
+  }
+
+  function sortTable(compareFn) {
+    const tbody = document.getElementById("productTableBody");
+    const rows = Array.from(tbody.querySelectorAll("tr"));
+    rows.sort(compareFn);
+    tbody.innerHTML = "";
+    rows.forEach(row => tbody.appendChild(row));
+  }
+
+  function sortByName() {
+    sortTable((a, b) => {
+      const nameA = a.querySelector(".product-name").textContent.toLowerCase();
+      const nameB = b.querySelector(".product-name").textContent.toLowerCase();
+      return nameA.localeCompare(nameB);
+    });
+  }
+
+  function sortByQuantity() {
+    sortTable((a, b) => {
+      const qtyA = parseInt(a.querySelector(".product-qty").textContent);
+      const qtyB = parseInt(b.querySelector(".product-qty").textContent);
+      return qtyA - qtyB;
+    });
+  }
+</script>
+{% endblock %}
