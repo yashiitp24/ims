@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Billing History{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+
+  <!-- Page heading -->
+  <h2 class="mb-4">Billing History</h2>
+
+  <!-- Check if the receipts list has any entries -->
+  {% if receipts %}
+
+    <!-- Table is responsive on smaller screens -->
+    <div class="table-responsive">
+
+      <!-- Table with dark header and striped rows -->
+      <table class="table table-striped table-bordered">
+
+        <!-- Table header row -->
+        <thead class="table-dark">
+          <tr>
+            <th>Receipt ID</th>
+            <th>Total Amount</th>
+            <th>Contact</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>View</th>
+          </tr>
+        </thead>
+
+        <!-- Table body filled with receipt data -->
+        <tbody>
+          {% for receipt in receipts %}
+          <tr>
+            <!-- Each field from the receipt row is printed here -->
+            <td>{{ receipt[0] }}</td> <!-- Receipt ID -->
+            <td>₹{{ "%.2f"|format(receipt[1]) }}</td> <!-- Total Amount formatted as INR -->
+            <td>{{ receipt[2] or 'N/A' }}</td> <!-- Contact (or show N/A if missing) -->
+            <td>{{ receipt[3] }}</td> <!-- Date -->
+            <td>{{ receipt[4] }}</td> <!-- Time -->
+            
+            <!-- Link to view the full receipt details -->
+            <td><a href="/receipt/{{ receipt[0] }}" class="btn btn-sm btn-primary">View</a></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+
+      </table>
+    </div>
+
+  {% else %}
+    <!-- Message if no receipts exist for the user -->
+    <p class="text-muted">No billing history found.</p>
+  {% endif %}
+
+</div>
+{% endblock %}
