@@ -1,0 +1,203 @@
+{% extends "base.html" %}
+{% block title %}Billing - IMS{% endblock %}
+
+{% block content %}
+<style>
+  /* This is the main container for the billing section */
+  .billing-container {
+    max-width: 800px;
+    margin: 30px auto;
+    background: #fff;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    font-family: 'Poppins', sans-serif;
+  }
+
+  /* Each row will contain product name, quantity, price etc */
+  .product-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .product-row .form-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Styling for form labels */
+  .form-group label {
+    font-weight: 500;
+    margin-bottom: 6px;
+    font-size: 14px;
+  }
+
+  /* Styling for inputs and select fields */
+  select,
+  input[type="number"],
+  input[readonly] {
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+  }
+
+  /* This is the red 'Remove' button shown next to each row */
+  .remove-btn {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    font-size: 13px;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 25px;
+  }
+
+  /* This row contains the add and generate receipt buttons */
+  .actions-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+  }
+
+  /* Green button to add a new product row */
+  .add-btn {
+    padding: 8px 18px;
+    background-color: #198754;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+
+  /* Blue button to submit the form and generate the receipt */
+  .submit-btn {
+    padding: 10px 24px;
+    background-color: #0d6efd;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 15px;
+    cursor: pointer;
+  }
+
+  /* Below is dark mode styling so the page looks good in dark mode too */
+  body.dark-mode {
+    background-color: #121212 !important;
+    color: #f0f0f0 !important;
+  }
+
+  body.dark-mode .billing-container {
+    background: #1f1f1f;
+    color: #f0f0f0;
+  }
+
+  body.dark-mode label,
+  body.dark-mode .form-group label {
+    color: #e0e0e0;
+  }
+
+  body.dark-mode input,
+  body.dark-mode select {
+    background-color: #2c2c2c;
+    color: #ffffff;
+    border-color: #555;
+  }
+
+  body.dark-mode input[readonly],
+  body.dark-mode input::placeholder {
+    color: #bbbbbb;
+  }
+</style>
+
+<!-- This is the actual billing form shown to the user -->
+<div class="billing-container">
+  <h2 style="text-align: center; margin-bottom: 25px;">Billing Section</h2>
+
+  <form method="POST" id="billing-form">
+    <!-- This container will hold all product rows dynamically -->
+    <div id="products-container"></div>
+
+    <!-- These are the buttons to add a row or submit the form -->
+    <div class="actions-row">
+      <button type="button" class="add-btn" onclick="addProductRow()">+ Add Product</button>
+      <button type="submit" class="submit-btn">Generate Receipt</button>
+    </div>
+  </form>
+</div>
+
+<script>
+  // Getting all available products from the server-side and making them accessible here
+  const allProducts = {{ products | tojson }};
+
+  // This function adds a new row for product selection in the form
+  function addProductRow() {
+    const container = document.getElementById('products-container');
+
+    const row = document.createElement('div');
+    row.className = 'product-row';
+
+    // Creating the actual row with product dropdown, quantity, price and total fields
+    row.innerHTML = `
+      <div class="form-group">
+        <label>Product Name</label>
+        <select name="product_name" onchange="updatePrice(this)">
+          <option value="" disabled selected>Select</option>
+          ${allProducts.map(p => `<option value="${p.name}">${p.name}</option>`).join('')}
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Quantity</label>
+        <input type="number" name="quantity" value="1" min="1" onchange="updateTotal(this)">
+      </div>
+
+      <div class="form-group">
+        <label>Price Per Unit</label>
+        <input type="number" name="price" readonly>
+      </div>
+
+      <div class="form-group">
+        <label>Total Price</label>
+        <input type="text" name="total" readonly>
+      </div>
+
+      <button type="button" class="remove-btn" onclick="this.parentElement.remove()">Remove</button>
+    `;
+
+    container.appendChild(row);
+  }
+
+  // When a product is selected, this sets the price and calculates the total
+  function updatePrice(selectElem) {
+    const product = allProducts.find(p => p.name === selectElem.value);
+    const priceInput = selectElem.closest('.product-row').querySelector('input[name="price"]');
+    const qtyInput = selectElem.closest('.product-row').querySelector('input[name="quantity"]');
+    const totalInput = selectElem.closest('.product-row').querySelector('input[name="total"]');
+
+    if (product) {
+      priceInput.value = product.price;
+      totalInput.value = (product.price * parseInt(qtyInput.value || 1)).toFixed(2);
+    }
+  }
+
+  // When the quantity is changed, this recalculates the total price
+  function updateTotal(qtyInput) {
+    const row = qtyInput.closest('.product-row');
+    const price = parseFloat(row.querySelector('input[name="price"]').value || 0);
+    const qty = parseInt(qtyInput.value || 1);
+    const totalInput = row.querySelector('input[name="total"]');
+    totalInput.value = (price * qty).toFixed(2);
+  }
+
+  // We automatically add the first row when the page loads so the form is ready
+  window.onload = () => {
+    addProductRow();
+  };
+</script>
+{% endblock %}
