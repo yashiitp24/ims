@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sign Up - IMS</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      height: 100vh;
+      overflow: hidden;
+      background-color: #f0f2f5;
+      position: relative;
+      display: flex;
+    }
+
+    /* Animated bubbles */
+    .bubble {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.25;
+      z-index: 0;
+      animation: float 6s infinite ease-in-out;
+    }
+
+    .bubble1 {
+      width: 150px;
+      height: 150px;
+      background-color: #007bff;
+      top: 25%;
+      left: 5%;
+      animation-delay: 0s;
+    }
+
+    .bubble2 {
+      width: 120px;
+      height: 120px;
+      background-color: #20c997;
+      bottom: 15%;
+      right: 10%;
+      animation-delay: 2s;
+    }
+
+    .bubble3 {
+      width: 100px;
+      height: 100px;
+      background-color: #ffc107;
+      top: 60%;
+      left: 40%;
+      animation-delay: 4s;
+    }
+
+    @keyframes float {
+      0%   { transform: translateY(0); }
+      50%  { transform: translateY(-80px); }
+      100% { transform: translateY(0); }
+    }
+
+    .left-side, .right-side {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .signup-box {
+      background: white;
+      padding: 40px;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 450px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .signup-box h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .signup-box input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    .signup-box button {
+      width: 100%;
+      padding: 10px;
+      background-color: #198754;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .signup-box button:hover {
+      background-color: #157347;
+    }
+
+    .signup-box .back-link {
+      text-align: center;
+      margin-top: 15px;
+    }
+
+    .signup-box .back-link a {
+      text-decoration: none;
+      color: #0d6efd;
+    }
+
+    /* Signboard message box */
+    .signboard {
+      background-color: #e3f2fd;
+      border-left: 5px solid #2196f3;
+      padding: 25px;
+      border-radius: 10px;
+      text-align: center;
+      font-size: 16px;
+      font-weight: 500;
+      box-shadow: 0 0 12px rgba(0,0,0,0.1);
+      max-width: 350px;
+    }
+
+    .signboard h3 {
+      font-size: 20px;
+      color: #0d6efd;
+      margin-bottom: 10px;
+    }
+
+    .signboard p {
+      color: #444;
+      font-size: 15px;
+      margin-bottom: 10px;
+    }
+
+    .signboard .arrow {
+      font-size: 28px;
+      margin-top: 10px;
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Animated Bubbles -->
+  <div class="bubble bubble1"></div>
+  <div class="bubble bubble2"></div>
+  <div class="bubble bubble3"></div>
+
+  <!-- Signup Form -->
+  <div class="left-side">
+    <div class="signup-box">
+      <h2>Create Your IMS Account</h2>
+      <form method="POST" action="/add_user">
+        <input type="text" name="fname" placeholder="Enter First Name" required>
+        <input type="text" name="lname" placeholder="Enter Last Name" required>
+        <input type="email" name="email" placeholder="Enter Email ID" required>
+        <input type="password" name="password" placeholder="Enter Password" required>
+        <button type="submit">Create Account</button>
+      </form>
+      <div class="back-link">
+        <p>Already have an account? <a href="/">Login here</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right Side Message -->
+  <div class="right-side">
+    <div class="signboard">
+      <h3>💡 Did you know?</h3>
+      <p>Small businesses lose <strong>20–30% of revenue</strong> due to poor inventory management.</p>
+      <p>Take control by creating your IMS account today!</p>
+      <div class="arrow">👈</div>
+    </div>
+  </div>
+
+</body>
+</html>
