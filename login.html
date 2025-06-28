@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login - IMS</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      height: 100vh;
+      overflow: hidden;
+      background-color: #f0f2f5;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header {
+      width: 100%;
+      padding: 20px 30px 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #0d6efd;
+      color: white;
+    }
+
+    .header .title {
+      font-size: 26px;
+      font-weight: 700;
+      text-align: right;
+    }
+
+    .header .clock-box {
+      display: flex;
+      gap: 10px;
+    }
+
+    .header .clock-box span {
+      background-color: rgba(255, 255, 255, 0.2);
+      padding: 6px 12px;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+
+    .bubble {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.25;
+      z-index: 0;
+      animation: float 6s infinite ease-in-out;
+    }
+
+    .bubble1 {
+      width: 140px;
+      height: 140px;
+      background-color: #ff6b6b;
+      top: 20%;
+      left: 5%;
+      animation-delay: 0s;
+    }
+
+    .bubble2 {
+      width: 100px;
+      height: 100px;
+      background-color: #5c9785;
+      bottom: 10%;
+      left: 10%;
+      animation-delay: 2s;
+    }
+
+    .bubble3 {
+      width: 80px;
+      height: 80px;
+      background-color: #007bff;
+      bottom: 20px;
+      right: 20px;
+      animation-delay: 4s;
+    }
+
+    @keyframes float {
+      0%   { transform: translateY(0); }
+      50%  { transform: translateY(-80px); }
+      100% { transform: translateY(0); }
+    }
+
+    .main-content {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .left-side, .right-side {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .login-box {
+      background: white;
+      padding: 40px;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 400px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .login-box h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-weight: 600;
+    }
+
+    .login-box input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    .login-box button {
+      width: 100%;
+      padding: 10px;
+      background-color: #0d6efd;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .login-box button:hover {
+      background-color: #0b5ed7;
+    }
+
+    .login-box .links {
+      text-align: center;
+      margin-top: 15px;
+    }
+
+    .login-box .links a {
+      text-decoration: none;
+      color: #0d6efd;
+      display: block;
+      margin-top: 5px;
+    }
+
+    .right-side img {
+      max-width: 80%;
+      max-height: 80%;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <!--  Header -->
+  <div class="header">
+    <div class="title">Inventory Management System</div>
+    <div class="clock-box">
+      <span id="current-date"></span>
+      <span id="current-time"></span>
+    </div>
+  </div>
+
+  <!-- Animated Bubbles -->
+  <div class="bubble bubble1"></div>
+  <div class="bubble bubble2"></div>
+  <div class="bubble bubble3"></div>
+
+  <!--  Login Page Content -->
+  <div class="main-content">
+    <div class="left-side">
+      <div class="login-box">
+        <h2>Welcome to IMS</h2>
+        <form method="post" action="/login_validation">
+          <input type="email" name="email" placeholder="Enter email" required>
+          <input type="password" name="password" placeholder="Enter password" required>
+          <button type="submit">Login</button>
+        </form>
+        <div class="links">
+          <a href="/signUp">Don't have an account? Sign up</a>
+          <a href="https://YOUR_GOOGLE_FORM_LINK_HERE" target="_blank">Forgot password?</a>
+        </div>
+      </div>
+    </div>
+    <div class="right-side">
+      <img src="{{ url_for('static', filename='imv.avif') }}" alt="Inventory Image">
+    </div>
+  </div>
+
+  <!-- Clock Script -->
+  <script>
+    function updateClock() {
+      const now = new Date();
+      document.getElementById("current-time").textContent = now.toLocaleTimeString();
+      document.getElementById("current-date").textContent = now.toLocaleDateString();
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+  </script>
+
+</body>
+</html>
